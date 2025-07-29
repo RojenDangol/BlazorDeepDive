@@ -1,0 +1,56 @@
+﻿@page "/servers/add"
+
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+
+<h3>AddServer</h3>
+<br />
+<br />
+
+<EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <FieldComponent Label="Name">
+        <Control>
+            <InputText @bind-Value="server.Name" class="form-control"></InputText>
+        </Control>
+        <ValidationControl>
+            <ValidationMessage For="() => server.Name"></ValidationMessage>
+        </ValidationControl>
+    </FieldComponent>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">City</label>
+        </div>
+        <div class="col-6">
+            <InputText @bind-Value="server.City" class="form-control"></InputText>
+        </div>
+        <div class="col">
+            <ValidationMessage For="() => server.City"></ValidationMessage>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">IsOnline</label>
+        </div>
+        <div class="col-6">
+            <InputCheckbox @bind-Value="server.IsOnline" class="form-check-input"></InputCheckbox>
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    &nbsp;
+    <a href="/servers" class="btn btn-primary">Close</a>
+</EditForm>
+
+@code {
+    // [SupplyParameterFromForm] // in interactive server this and formName is not required 
+    private Server server { get; set; } = new Server() { IsOnline = false };
+    private void Submit()
+    {
+        ServersRepository.AddServer(server);
+        NavigationManager.NavigateTo("/servers");
+    }
+}

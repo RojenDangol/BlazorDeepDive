@@ -1,0 +1,92 @@
+﻿@inject NavigationManager NavigationManager;
+
+@if(Server != null)
+{
+    <tr style="background-color: @GetBackgroundColor()">
+        <td>
+            @Server.Name
+        </td>
+        <td>
+            @Server.City
+        </td>
+        <td  style="color:@(Server.IsOnline ? "green" : "red")">
+            @(Server.IsOnline ? "Online" : "Offline")
+        </td>
+        <td>
+            @if (Server.IsOnline)
+            {
+                Random random = new Random();
+                int randomNumber = random.Next(0, 5000);
+                <text>@randomNumber</text>
+            }
+            else
+            {
+                <text>N/A</text>
+            }
+        </td>
+        <td>
+            @if (Server.IsOnline)
+            {
+                <button class="btn btn-outline-danger"
+                        @onclick="@(() => { Server.IsOnline = false; })">
+                    Turn Off
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-outline-success"
+                        @onclick="@(() => { Server.IsOnline = true; })">
+                    Turn On
+                </button>
+            }
+            &nbsp;
+            <a href="/servers/@Server.ServerId" class="btn btn-outline-primary">Edit</a>
+        </td>
+        <td>
+            <EditForm Model="Server" FormName="@($"form-server-{Server.ServerId}")" OnValidSubmit="@(() => { DeleteServer(Server.ServerId); })">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </EditForm>
+        </td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public Server? Server { get; set; }
+
+    [CascadingParameter(Name = "SelectedCity")]
+    public string? SelectedCity { get; set; }
+
+
+
+    private void DeleteServer(int serverId)
+    {
+        if (serverId > 0)
+        {
+            ServersRepository.DeleteServer(serverId);
+            NavigationManager.NavigateTo("/servers", true);
+        }
+    }
+
+    public string GetBackgroundColor()
+    {
+        if(SelectedCity != null)
+        {
+            switch (this.SelectedCity)
+            {
+                case "Toronto": return "powderblue";
+                case "Montreal": return "lightgray";
+                case "Ottawa": return "palegreen";
+                case "Calgary": return "pink";
+                case "Halifax": return "white";
+                default:
+                    return "white";
+            }
+        }
+        else
+        {
+            return "white";
+        }
+    }
+}
+
