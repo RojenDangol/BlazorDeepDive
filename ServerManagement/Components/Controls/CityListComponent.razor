@@ -19,12 +19,12 @@
     [Parameter]
     public EventCallback<string> SelectCityCallback { get; set; }
 
+    private string selectedCity = "Toronto";
+
     public void ClearSelection()
     {
         this.selectedCity = string.Empty;
     }
-
-    private string selectedCity = "Toronto";
 
     private List<string> cities = CitiesRepository.GetCities();
 

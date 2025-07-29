@@ -1,0 +1,37 @@
+﻿@if(Item != null)
+{
+    <li @key="Item.Id">
+        <div class="row mb-2">
+            <div class="col-1" style="width:30px">
+                <input style="vertical-align:middle"
+                       type="checkbox"
+                       class="form-check-input"
+                       @bind-value="Item.IsCompleted"
+                       checked="@Item.IsCompleted" />
+            </div>
+            <div class="col">
+                @if (Item.IsCompleted)
+                {
+                    <input type="text" class="form-control border-0 text-decoration-line-through" @bind-value="@Item.Name" style="vertical-align:middle" disabled />
+                }
+                else
+                {
+                    <input type="text" class="form-control border-0" @bind-value="@Item.Name" style="vertical-align:middle" />
+                }
+            </div>
+            <div class="col">
+                @if (Item.IsCompleted)
+                {
+                    <text>Completed at: @Item.DateCompleted.ToLongDateString()</text>
+                }
+            </div>
+
+        </div>
+    </li>
+}
+
+
+@code {
+    [Parameter]
+    public ToDoItem? Item{ get; set; }
+}

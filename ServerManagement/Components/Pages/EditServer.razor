@@ -1,9 +1,11 @@
 ﻿@page "/servers/{id:int}"
 
-
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 
 <h3>Edit Server</h3>
 <br />
@@ -41,7 +43,7 @@
         </FieldComponent>
         <button type="submit" class="btn btn-primary mt-2">Update</button>
         &nbsp;
-        <a href="/servers" class="btn btn-primary">Close</a>
+        <a href="/servers" class="btn btn-primary mt-2">Close</a>
     </EditForm>
 }
 
@@ -64,6 +66,15 @@
             ServersRepository.UpdateServer(server.ServerId, server);
         }
         NavigationManager.NavigateTo("/servers");
+    }
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var isConfirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to leave this page?");
+        if (!isConfirmed)
+        {
+            context.PreventNavigation();
+        }
     }
 
 }
