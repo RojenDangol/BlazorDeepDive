@@ -1,9 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ServerManagement.Components;
+using ServerManagement.Data;
+using ServerManagement.StateStore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContextFactory<ServerManagementContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ServerManagament"));
+});
+
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
+builder.Services.AddTransient<SessionStorage>();
+builder.Services.AddScoped<ContainerStorage>();
+builder.Services.AddScoped<TorontoOnlineServersStore>();
+builder.Services.AddScoped<MontrealOnlineServersStore>();
 
 var app = builder.Build();
 
