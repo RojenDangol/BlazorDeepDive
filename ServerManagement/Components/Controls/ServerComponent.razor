@@ -4,6 +4,8 @@
 @inject TorontoOnlineServersStore TorontoOnlineServersStore;
 @inject MontrealOnlineServersStore MontrealOnlineServersStore;
 
+@inject IServersEFCoreRepository ServersEFCoreRepository;
+
 @if(Server != null)
 {
     <tr style="background-color: @GetBackgroundColor()">
@@ -67,7 +69,7 @@
     {
         if (serverId > 0)
         {
-            ServersRepository.DeleteServer(serverId);
+            ServersEFCoreRepository.DeleteServer(serverId);
             NavigationManager.NavigateTo("/servers", true);
         }
     }
@@ -112,6 +114,8 @@
                     }
                 }
                 this.Server.IsOnline = status;
+
+                ServersEFCoreRepository.UpdateServer(this.Server.ServerId, Server);
             }
         }
     }

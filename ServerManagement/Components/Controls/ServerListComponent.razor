@@ -1,5 +1,7 @@
 ﻿@inject NavigationManager NavigationManager;
 
+@inject IServersEFCoreRepository ServersEFCoreRepository;
+
 @* @if(this.servers != null && this.servers.Count > 0)
 {
     <ul class="list-unstyled">
@@ -44,11 +46,11 @@
     {
         if (string.IsNullOrEmpty(this.SearchFilter))
         {
-            servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
+            servers = ServersEFCoreRepository.GetServersByCity(CityName ?? "Toronto");
         }
         else
         {
-            servers = ServersRepository.SearchServers(this.SearchFilter);
+            servers = ServersEFCoreRepository.SearchServers(this.SearchFilter);
         }
     }
 }

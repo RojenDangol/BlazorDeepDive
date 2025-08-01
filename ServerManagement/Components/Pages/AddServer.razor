@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 <h3>AddServer</h3>
 <br />
@@ -50,7 +51,7 @@
     private Server server { get; set; } = new Server() { IsOnline = false };
     private void Submit()
     {
-        ServersRepository.AddServer(server);
+        ServersEFCoreRepository.AddServer(server);
         NavigationManager.NavigateTo($"/servers/back_from/{this.server?.City}");
     }
 }

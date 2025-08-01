@@ -1,7 +1,11 @@
 ﻿@page "/quickgrid"
 @inject NavigationManager NavigationManager
+
 @rendermode InteractiveServer
+
 @using Microsoft.AspNetCore.Components.QuickGrid
+
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 <h3>QuickGridDemo</h3>
 <br />
@@ -68,15 +72,23 @@
 
 
 @code {
-    private List<Server>? servers = ServersRepository.GetServres();
+    private List<Server>? servers;
 
     private PaginationState paginationState = new PaginationState { ItemsPerPage = 5 };
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            servers = ServersEFCoreRepository.GetServers();
+        }
+    }
 
     private void DeleteServer(int serverId)
     {
         if (serverId > 0)
         {
-            ServersRepository.DeleteServer(serverId);
+            ServersEFCoreRepository.DeleteServer(serverId);
             NavigationManager.NavigateTo("/quickgrid", true);
         }
     }
